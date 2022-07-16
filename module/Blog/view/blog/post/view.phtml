@@ -19,10 +19,7 @@ $form->prepare();
 
 ?>
 
-<a href="
-    <?= $this->url('blog'); ?>">
-    &lt;&lt; Back to list of posts
-</a>
+<a class="btn btn-outline-primary mb-3" href="<?= $this->url('post'); ?>">Back to list of posts</a>
 
 <h1>
     <?= $this->escapeHtml($post->getTitle()); ?>
