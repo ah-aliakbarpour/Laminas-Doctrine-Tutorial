@@ -2,9 +2,7 @@
 
 namespace Blog;
 
-use Blog\Controller\Factory\IndexControllerFactory;
 use Blog\Controller\Factory\PostControllerFactory;
-use Blog\Controller\IndexController;
 use Blog\Controller\PostController;
 use Blog\Service\Factory\PostManagerFactory;
 use Blog\Service\PostManager;
@@ -15,27 +13,61 @@ use Laminas\Router\Http\Segment;
 return [
     'router' => [
         'routes' => [
-            'blog' => [
-                'type'    => Literal::class,
+            'post' => [
+                'type' => Literal::class,
                 'options' => [
-                    'route'    => '/blog',
+                    'route' => '/post',
                     'defaults' => [
-                        'controller' => IndexController::class,
-                        'action'     => 'index',
-                    ],
+                        'controller' => PostController::class,
+                        'action' => 'index',
+                    ]
                 ],
-            ],
-            'posts' => [
-                'type'    => Segment::class,
-                'options' => [
-                    'route'    => '/posts[/:action[/:id]]',
-                    'constraints' => [
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id' => '[0-9]*'
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'view' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route'    => '/:id',
+                            'defaults' => [
+                                'action' => 'view',
+                            ],
+                            'constraints' => [
+                                'id' => '[1-9]\d*',
+                            ],
+                        ],
                     ],
-                    'defaults' => [
-                        'controller'    => Controller\PostController::class,
-                        'action'        => 'index',
+                    'add' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route'    => '/add',
+                            'defaults' => [
+                                'action'     => 'add',
+                            ],
+                        ],
+                    ],
+                    'edit' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route'    => '/edit/:id',
+                            'defaults' => [
+                                'action'     => 'edit',
+                            ],
+                            'constraints' => [
+                                'id' => '[1-9]\d*',
+                            ],
+                        ],
+                    ],
+                    'delete' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/delete/:id',
+                            'defaults' => [
+                                'action'     => 'delete',
+                            ],
+                            'constraints' => [
+                                'id' => '[1-9]\d*',
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -43,7 +75,6 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            IndexController::class => IndexControllerFactory::class,
             PostController::class => PostControllerFactory::class,
         ]
     ],
