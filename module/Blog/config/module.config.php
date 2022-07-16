@@ -5,10 +5,21 @@ namespace Blog;
 use Blog\Controller\Factory\IndexControllerFactory;
 use Blog\Controller\IndexController;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Laminas\Router\Http\Literal;
 
 return [
     'router' => [
         'routes' => [
+            'blog' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/blog',
+                    'defaults' => [
+                        'controller' => IndexController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers' => [
