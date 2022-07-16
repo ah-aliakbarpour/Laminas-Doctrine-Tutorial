@@ -73,4 +73,35 @@ class PostManager
             $post->addTag($tag);
         }
     }
+
+    // This method allows updating data of a single post.
+    public function updatePost($post, $data)
+    {
+        $post->setTitle($data['title']);
+        $post->setContent($data['content']);
+        $post->setStatus($data['status']);
+
+        // Add tags to post
+        $this->addTagsToPost($data['tags'], $post);
+
+        // Apply changes to database.
+        $this->entityManager->flush();
+    }
+
+    // Convert tags of the given post to comma separated list (string).
+    public function convertTagsToString($post)
+    {
+        $tags = $post->getTags();
+        $tagCount = count($tags);
+        $tagsStr = '';
+        $i = 0;
+        foreach ($tags as $tag) {
+            $i++;
+            $tagsStr .= $tag->getName();
+            if ($i < $tagCount)
+                $tagsStr .= ', ';
+        }
+
+        return $tagsStr;
+    }
 }

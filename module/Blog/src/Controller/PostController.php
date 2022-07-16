@@ -2,6 +2,7 @@
 
 namespace Blog\Controller;
 
+use Blog\Entity\Post;
 use Blog\Form\PostForm;
 use Blog\Service\PostManager;
 use Doctrine\ORM\EntityManager;
@@ -66,6 +67,60 @@ class PostController extends AbstractActionController
         // Render the view template.
         return new ViewModel([
             'form' => $form
+        ]);
+    }
+
+    // This action displays the page allowing to edit a post.
+    public function editAction()
+    {
+        // Create the form.
+        $form = new PostForm();
+
+        // Get post ID.
+        $postId = $this->params()->fromRoute('id', -1);
+
+        // Find existing post in the database.
+        $post = $this->entityManager->getRepository(Post::class)
+            ->findOneById($postId);
+        if ($post == null) {
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
+
+        // Check whether this post is a POST request.
+        if ($this->getRequest()->isPost()) {
+
+            // Get POST data.
+            $data = $this->params()->fromPost();
+
+            // Fill form with data.
+            $form->setData($data);
+            if ($form->isValid()) {
+
+                // Get validated form data.
+                $data = $form->getData();
+
+                // Use post manager service to add new post to database.
+                $this->postManager->updatePost($post, $data);
+
+                // Redirect the user to "blog/index" page.
+                return $this->redirect()->toRoute('blog');
+            }
+        } else {
+            $data = [
+                'title' => $post->getTitle(),
+                'content' => $post->getContent(),
+                'tags' => $this->postManager->convertTagsToString($post),
+                'status' => $post->getStatus()
+            ];
+
+            $form->setData($data);
+        }
+
+        // Render the view template.
+        return new ViewModel([
+            'form' => $form,
+            'post' => $post
         ]);
     }
 }
