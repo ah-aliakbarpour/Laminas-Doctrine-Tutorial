@@ -3,6 +3,7 @@
 namespace Blog\Service;
 
 // The PostManager service is responsible for adding new posts.
+use Blog\Entity\Comment;
 use Blog\Entity\Post;
 use Blog\Entity\Tag;
 use Doctrine\ORM\EntityManager;
@@ -122,6 +123,37 @@ class PostManager
 
         $this->entityManager->remove($post);
 
+        $this->entityManager->flush();
+    }
+
+    // Returns count of comments for given post as properly formatted string.
+    public function getCommentCountStr($post)
+    {
+        $commentCount = count($post->getComments());
+        if ($commentCount == 0)
+            return 'No comments';
+        else if ($commentCount == 1)
+            return '1 comment';
+        else
+            return $commentCount . ' comments';
+    }
+
+
+    // This method adds a new comment to post.
+    public function addCommentToPost($post, $data)
+    {
+        // Create new Comment entity.
+        $comment = new Comment();
+        $comment->setPost($post);
+        $comment->setAuthor($data['author']);
+        $comment->setContent($data['comment']);
+        $currentDate = date('Y-m-d H:i:s');
+        $comment->setDateCreated($currentDate);
+
+        // Add the entity to entity manager.
+        $this->entityManager->persist($comment);
+
+        // Apply changes.
         $this->entityManager->flush();
     }
 }
