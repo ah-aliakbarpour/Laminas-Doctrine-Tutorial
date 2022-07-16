@@ -126,8 +126,8 @@ class PostController extends AbstractActionController
                 // Use post manager service to add new post to database.
                 $this->postManager->addNewPost($data);
 
-                // Redirect the user to "blog/index" page.
-                return $this->redirect()->toRoute('blog');
+                // Redirect the user to posts list page.
+                return $this->redirect()->toRoute('post');
             }
         }
 
@@ -170,8 +170,8 @@ class PostController extends AbstractActionController
                 // Use post manager service to add new post to database.
                 $this->postManager->updatePost($post, $data);
 
-                // Redirect the user to "blog/index" page.
-                return $this->redirect()->toRoute('blog');
+                // Redirect the user to posts list page.
+                return $this->redirect()->toRoute('post');
             }
         } else {
             $data = [
@@ -205,7 +205,7 @@ class PostController extends AbstractActionController
 
         $this->postManager->removePost($post);
 
-        // Redirect the user to "blog/index" page.
-        return $this->redirect()->toRoute('blog');
+        // Redirect the user to posts list page.
+        return $this->redirect()->toRoute('post');
     }
 }
