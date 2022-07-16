@@ -104,4 +104,24 @@ class PostManager
 
         return $tagsStr;
     }
+
+    // Removes post and all associated comments.
+    public function removePost($post)
+    {
+        // Remove associated comments
+        $comments = $post->getComments();
+        foreach ($comments as $comment) {
+            $this->entityManager->remove($comment);
+        }
+
+        // Remove tag associations (if any)
+        $tags = $post->getTags();
+        foreach ($tags as $tag) {
+            $post->removeTagAssociation($tag);
+        }
+
+        $this->entityManager->remove($post);
+
+        $this->entityManager->flush();
+    }
 }

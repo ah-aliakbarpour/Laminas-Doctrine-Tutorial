@@ -123,4 +123,22 @@ class PostController extends AbstractActionController
             'post' => $post
         ]);
     }
+
+    // This "delete" action Delete the Post.
+    public function deleteAction()
+    {
+        $postId = $this->params()->fromRoute('id', -1);
+
+        $post = $this->entityManager->getRepository(Post::class)
+            ->findOneById($postId);
+        if ($post == null) {
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
+
+        $this->postManager->removePost($post);
+
+        // Redirect the user to "blog/index" page.
+        return $this->redirect()->toRoute('blog');
+    }
 }
