@@ -2,6 +2,8 @@
 
 namespace Blog\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Blog\Entity\Comment;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,6 +13,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Post
 {
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+        $this->tags = new ArrayCollection();
+    }
+
     // Post status constants.
     const STATUS_DRAFT       = 1; // Draft.
     const STATUS_PUBLISHED   = 2; // Published.
@@ -100,5 +108,65 @@ class Post
     public function setDateCreated($dateCreated)
     {
         $this->dateCreated = $dateCreated;
+    }
+
+    /**
+     * @ORM\OneToMany(targetEntity="\Blog\Entity\Comment", mappedBy="post")
+     * @ORM\JoinColumn(name="id", referencedColumnName="post_id")
+     */
+    protected $comments;
+
+    /**
+     * Returns comments for this post.
+     * @return ArrayCollection
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * Adds a new comment to this post.
+     * @param $comment
+     */
+    public function addComment($comment)
+    {
+        $this->comments[] = $comment;
+    }
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\Blog\Entity\Tag", inversedBy="posts")
+     * @ORM\JoinTable(name="post_tag",
+     *      joinColumns={@ORM\JoinColumn(name="post_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
+     *      )
+     */
+    protected $tags;
+
+    /**
+     * Returns tags for this post.
+     * @return ArrayCollection
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * Adds a new tag to this post.
+     * @param $tag
+     */
+    public function addTag($tag)
+    {
+        $this->tags[] = $tag;
+    }
+
+    /**
+     * Removes association between this post and the given tag.
+     * @param $tag
+     */
+    public function removeTagAssociation($tag)
+    {
+        $this->tags->removeElement($tag);
     }
 }

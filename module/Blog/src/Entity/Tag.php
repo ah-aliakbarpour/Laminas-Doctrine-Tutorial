@@ -2,6 +2,7 @@
 
 namespace Blog\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,6 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Tag
 {
+    // Constructor.
+    public function __construct()
+    {
+        $this->posts = new ArrayCollection();
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -45,5 +52,28 @@ class Tag
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\Blog\Entity\Post", mappedBy="tags")
+     */
+    protected $posts;
+
+    /**
+     * Returns posts for this tag.
+     * @return ArrayCollection
+     */
+    public function getPosts()
+    {
+        return $this->posts;
+    }
+
+    /**
+     * Adds a new post to this tag.
+     * @param $post
+     */
+    public function addPost($post)
+    {
+        $this->posts[] = $post;
     }
 }

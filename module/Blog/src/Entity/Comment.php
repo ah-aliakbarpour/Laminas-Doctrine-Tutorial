@@ -80,4 +80,29 @@ class Comment
     {
         $this->dateCreated = $dateCreated;
     }
+
+    /**
+     * @ORM\ManyToOne(targetEntity="\Blog\Entity\Post", inversedBy="comments")
+     * @ORM\JoinColumn(name="post_id", referencedColumnName="id")
+     */
+    protected $post;
+
+    /**
+     * Returns associated post.
+     * @return \Blog\Entity\Post
+     */
+    public function getPost()
+    {
+        return $this->post;
+    }
+
+    /**
+     * Sets associated post.
+     * @param \Blog\Entity\Post $post
+     */
+    public function setPost($post)
+    {
+        $this->post = $post;
+        $post->addComment($this);
+    }
 }
