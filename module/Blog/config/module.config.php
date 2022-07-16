@@ -2,6 +2,8 @@
 
 namespace Blog;
 
+use Blog\Controller\Factory\IndexControllerFactory;
+use Blog\Controller\IndexController;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 
 return [
@@ -10,6 +12,9 @@ return [
         ],
     ],
     'controllers' => [
+        'factories' => [
+            IndexController::class => IndexControllerFactory::class,
+        ]
     ],
     'view_manager' => [
         'template_path_stack' => [
