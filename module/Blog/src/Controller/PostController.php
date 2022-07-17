@@ -59,7 +59,7 @@ class PostController extends AbstractActionController
 
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
         $paginator = new Paginator($adapter);
-        $paginator->setDefaultItemCountPerPage(1);
+        $paginator->setDefaultItemCountPerPage(2);
         $paginator->setCurrentPageNumber($page);
 
         // Get popular tags.
