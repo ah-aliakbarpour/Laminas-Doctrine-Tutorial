@@ -65,3 +65,8 @@ $this->headTitle('Posts list');
         </div>
     </div>
 </div>
+
+<?= $this->paginationControl($posts,
+    'Sliding',
+    'blog/partial/paginator',
+    ['route' => 'post']); ?>

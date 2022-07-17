@@ -181,8 +181,10 @@ class PostManager
             ->findAll();
         foreach ($tags as $tag) {
 
-            $postsByTag = $this->entityManager->getRepository(Post::class)
+            $postsByTagQuery = $this->entityManager->getRepository(Post::class)
                 ->findPostsByTag($tag->getName());
+
+            $postsByTag = $postsByTagQuery->getResult();
 
             $postCount = count($postsByTag);
             if ($postCount > 0) {

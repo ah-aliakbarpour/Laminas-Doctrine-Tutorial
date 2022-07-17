@@ -42,8 +42,21 @@ class PostRepository extends EntityRepository
             ->setParameter('1', Post::STATUS_PUBLISHED)
             ->setParameter('2', $tagName);
 
-        $posts = $queryBuilder->getQuery()->getResult();
+        return $queryBuilder->getQuery();
+    }
 
-        return $posts;
+    public function findPublishedPosts()
+    {
+        $entityManager = $this->getEntityManager();
+
+        $queryBuilder = $entityManager->createQueryBuilder();
+
+        $queryBuilder->select('p')
+            ->from(Post::class, 'p')
+            ->where('p.status = ?1')
+            ->orderBy('p.dateCreated', 'DESC')
+            ->setParameter('1', Post::STATUS_PUBLISHED);
+
+        return $queryBuilder->getQuery();
     }
 }
