@@ -39,14 +39,29 @@ class PostController extends AbstractActionController
      */
     public function indexAction()
     {
-        // Get recent posts
-        $posts = $this->entityManager->getRepository(Post::class)
-            ->findBy(['status'=>Post::STATUS_PUBLISHED],
-                ['dateCreated'=>'DESC']);
+        $tagFilter = $this->params()->fromQuery('tag', null);
 
-        // Render the view template
+        if ($tagFilter) {
+
+            // Filter posts by tag
+            $posts = $this->entityManager->getRepository(Post::class)
+                ->findPostsByTag($tagFilter);
+
+        } else {
+            // Get recent posts
+            $posts = $this->entityManager->getRepository(Post::class)
+                ->findBy(['status'=>Post::STATUS_PUBLISHED],
+                    ['dateCreated'=>'DESC']);
+        }
+
+        // Get popular tags.
+        $tagCloud = $this->postManager->getTagCloud();
+
+        // Render the view template.
         return new ViewModel([
-            'posts' => $posts
+            'posts' => $posts,
+            'postManager' => $this->postManager,
+            'tagCloud' => $tagCloud
         ]);
     }
 

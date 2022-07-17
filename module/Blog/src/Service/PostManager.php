@@ -167,4 +167,36 @@ class PostManager
 
         return 'Unknown';
     }
+
+    // Calculates frequencies of tag usage.
+    public function getTagCloud()
+    {
+        $tagCloud = [];
+
+        $posts = $this->entityManager->getRepository(Post::class)
+            ->findPostsHavingAnyTag();
+        $totalPostCount = count($posts);
+
+        $tags = $this->entityManager->getRepository(Tag::class)
+            ->findAll();
+        foreach ($tags as $tag) {
+
+            $postsByTag = $this->entityManager->getRepository(Post::class)
+                ->findPostsByTag($tag->getName());
+
+            $postCount = count($postsByTag);
+            if ($postCount > 0) {
+                $tagCloud[$tag->getName()] = $postCount;
+            }
+        }
+
+        $normalizedTagCloud = [];
+
+        // Normalize
+        foreach ($tagCloud as $name=>$postCount) {
+            $normalizedTagCloud[$name] =  $postCount/$totalPostCount;
+        }
+
+        return $normalizedTagCloud;
+    }
 }
