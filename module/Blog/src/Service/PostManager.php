@@ -156,4 +156,15 @@ class PostManager
         // Apply changes.
         $this->entityManager->flush();
     }
+
+    // Returns status as a string.
+    public function getPostStatusAsString($post)
+    {
+        switch ($post->getStatus()) {
+            case Post::STATUS_DRAFT: return 'Draft';
+            case Post::STATUS_PUBLISHED: return 'Published';
+        }
+
+        return 'Unknown';
+    }
 }

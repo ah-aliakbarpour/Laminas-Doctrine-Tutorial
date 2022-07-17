@@ -208,4 +208,21 @@ class PostController extends AbstractActionController
         // Redirect the user to posts list page.
         return $this->redirect()->toRoute('post');
     }
+
+    /**
+     * This "admin" action displays the Manage Posts page. This page contains
+     * the list of posts with an ability to edit/delete any post.
+     */
+    public function adminAction()
+    {
+        // Get posts
+        $posts = $this->entityManager->getRepository(Post::class)
+            ->findBy([], ['dateCreated'=>'DESC']);
+
+        // Render the view template
+        return new ViewModel([
+            'posts' => $posts,
+            'postManager' => $this->postManager
+        ]);
+    }
 }

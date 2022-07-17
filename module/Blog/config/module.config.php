@@ -69,6 +69,15 @@ return [
                             ],
                         ],
                     ],
+                    'admin' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route' => '/admin',
+                            'defaults' => [
+                                'action'     => 'admin',
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
