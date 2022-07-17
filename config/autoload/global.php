@@ -13,5 +13,14 @@
  */
 
 return [
-    // ...
+    'doctrine' => [
+        // migrations configuration
+        'migrations_configuration' => [
+            'orm_default' => [
+                'migrations_paths' => [
+                    'Migrations' => 'data/Migrations',
+                ],
+            ],
+        ],
+    ],
 ];
