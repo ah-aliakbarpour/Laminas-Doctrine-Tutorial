@@ -1,5 +1,8 @@
 <?php
 
+$this->headTitle('Edit Post');
+
+
 $form = $this->form;
 $form->get('title')->setAttributes([
     'class'=>'form-control',
@@ -23,7 +26,7 @@ $form->prepare();
 
 ?>
 
-<a class="btn btn-outline-primary mb-3" href="<?= $this->url('post'); ?>">Back to list of posts</a>
+<a class="btn btn-outline-primary mb-3" href="<?= $this->url('post/admin'); ?>">Back to Admin</a>
 
 <h1>Edit Post</h1>
 

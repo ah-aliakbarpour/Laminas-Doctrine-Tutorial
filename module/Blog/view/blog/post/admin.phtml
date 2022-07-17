@@ -5,13 +5,15 @@
  * @var $postManager \Blog\Service\PostManager
  */
 
+$this->headTitle('Blog Admin');
+
 ?>
 
 <h1>Manage Posts</h1>
 
 <p>
     <a class="btn btn-primary" href="<?= $this->url('post/add'); ?>">
-        New Post
+        Add Post
     </a>
 </p>
 

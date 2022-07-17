@@ -1,8 +1,12 @@
 <?php
+
 /**
  * @var $post \Blog\Entity\Post
  * @var $postManager \Blog\Service\PostManager
  */
+
+$this->headTitle('Post Details');
+
 
 $form = $this->form;
 $form->get('author')->setAttributes([
